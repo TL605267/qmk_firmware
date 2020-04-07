@@ -45,7 +45,9 @@ static uint16_t space_cadet_control_timer = 0;
 
 enum layers {
   _QWERTY,
+  _COLEMAK,
   _SWE,
+  _SWE_CMK,
   _L1,
   _L2,
   _L3,
@@ -74,6 +76,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   KC_LSFT,   KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH,  SFT_ENT,  \
   LAY_3,     KC_LCTL, KC_LALT, KC_LGUI, L1_EQL, KC_LCTRL, KC_SPC,  MIN_L2,  KC_RGUI, ALT_AA  ,SWE_AE,   SWE_OE  \
   ),
+ [_COLEMAK] = LAYOUT( \
+  _______, _______, _______ , _______, _______, _______, _______, _______, _______, _______, _______, _______, \
+  _______, _______, _______,  KC_F ,   KC_P,    KC_G,    KC_J,    KC_L,    KC_U,    KC_Y   , KC_SCLN, _______, \
+  _______, _______, KC_R ,    KC_S,    KC_T,    KC_D,    KC_H   , KC_N,    KC_E,    KC_I,    KC_O,   _______, \
+  _______, _______, _______ , _______, _______, _______, KC_K,    _______, _______, _______, _______, _______, \
+  _______, _______, _______ , _______, _______, _______, _______, _______, _______, _______, _______, _______ \
+  ),
  /* Swedish locked layer
  * ,-----------------------------------------------------------------------------------.
  * |      |      |      |      |      |      |      |      |      |      |      |      |
@@ -94,6 +103,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   _______, _______, _______ , _______, _______, _______, _______, _______, _______, _______,   _______,  _______, \
   _______, _______, _______ , _______, _______, _______, _______, _______, _______, KC_BSLASH, KC_QUOT,  KC_SCLN \
   ),
+[_SWE_CMK] = LAYOUT( \
+  _______, _______, _______ , _______, _______, _______, _______, _______, _______, _______,   _______,  _______, \
+  _______, _______, _______ , _______, _______, _______, _______, _______, _______, _______,   SWE_OE,   SWE_AA, \
+  _______, _______, _______ , _______, _______, _______, _______, _______, _______, _______,   _______,  SWE_AE, \
+  _______, _______, _______ , _______, _______, _______, _______, _______, _______, _______,   _______,  _______, \
+  _______, _______, _______ , _______, _______, _______, _______, _______, _______, KC_BSLASH, KC_QUOT,  KC_SCLN \
+  ),
 
  /* Layer 1
  * ,-----------------------------------------------------------------------------------.
@@ -109,10 +125,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * `-----------------------------------------------------------------------------------'
  */
 [_L1] = LAYOUT( \
-  KC_GRAVE,XXXXXXX,      XXXXXXX ,   XXXXXXX,     XXXXXXX,    XXXXXXX,   XXXXXXX,   XXXXXXX,   XXXXXXX, KC_MINUS, KC_EQL,   KC_DEL, \
+  KC_GRAVE,TG(_COLEMAK),  _______  ,  XXXXXXX,     XXXXXXX,    XXXXXXX,   XXXXXXX,   XXXXXXX,   XXXXXXX, KC_MINUS, KC_EQL,   KC_DEL, \
   GUITAB,  XXXXXXX,      KC_MS_UP ,  XXXXXXX,     KC_WH_U,    XXXXXXX,   XXXXXXX,   XXXXXXX,   XXXXXXX, KC_LCBR,  KC_RCBR,  SWE_AA, \
   XXXXXXX, KC_MS_LEFT,   KC_MS_DOWN, KC_MS_RIGHT, KC_WH_D,    XXXXXXX,   KC_LEFT,   KC_DOWN,   KC_UP,   KC_RGHT,  SWE_OE,   SWE_AE, \
-  _______, XXXXXXX,      XXXXXXX ,   KC_MS_BTN1,  KC_MS_BTN2, XXXXXXX,   WORDL,     XXXXXXX,   XXXXXXX, WORDR,    _______,  _______, \
+  _______, XXXXXXX,      XXXXXXX ,   KC_MS_BTN1,  KC_MS_BTN2, XXXXXXX,   WORDL,     XXXXXXX,   XXXXXXX, WORDR,    _______,  TG(_SWE_CMK), \
   _______, _______,      _______ ,   _______,     _______,    _______,   _______,   _______,   SAD,     HAPPY,   TONGUE,    TG(_SWE) \
   ),
 
