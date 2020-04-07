@@ -44,8 +44,8 @@
 static uint16_t space_cadet_control_timer = 0;
 
 enum layers {
-  _QWERTY,
   _COLEMAK,
+  _QWERTY,
   _SWE,
   _SWE_CMK,
   _L1,
@@ -68,7 +68,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * | LAY_3| Ctrl | Alt  | GUI  | = /L1| Ctrl |Space |-/L2  | GUI  |ALT/Å |  Ä   |   Ö    |
  * `-------------------------------------------------------------------------------------'
  */
-
+/*
 [_QWERTY] = LAYOUT( \
   KC_GESC,   KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,     KC_BSPC, \
   KC_TAB,    KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,     KC_BSLASH,  \
@@ -81,6 +81,22 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   _______, _______, _______,  KC_F ,   KC_P,    KC_G,    KC_J,    KC_L,    KC_U,    KC_Y   , KC_SCLN, _______, \
   _______, _______, KC_R ,    KC_S,    KC_T,    KC_D,    KC_H   , KC_N,    KC_E,    KC_I,    KC_O,   _______, \
   _______, _______, _______ , _______, _______, _______, KC_K,    _______, _______, _______, _______, _______, \
+  _______, _______, _______ , _______, _______, _______, _______, _______, _______, _______, _______, _______ \
+  ),
+  */
+
+[_COLEMAK] = LAYOUT( \
+  KC_GESC,   KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,     KC_BSPC, \
+  KC_TAB,    KC_Q,    KC_W,    KC_F,    KC_P,    KC_G,    KC_J,    KC_L,    KC_U,    KC_Y,    KC_SCLN,  KC_BSLASH,  \
+  VIM_ESC,   KC_A,    KC_R,    KC_S,    KC_T,    KC_D,    KC_H,    KC_N,    KC_E,    KC_I,    KC_O,     KC_QUOT, \
+  KC_LSFT,   KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_K,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH,  SFT_ENT,  \
+  LAY_3,     KC_LCTL, KC_LALT, KC_LGUI, L1_EQL, KC_LCTRL, KC_SPC,  MIN_L2,  KC_RGUI, ALT_AA  ,SWE_AE,   SWE_OE  \
+  ),
+ [_QWERTY] = LAYOUT( \
+  _______, _______, _______ , _______, _______, _______, _______, _______, _______, _______, _______, _______, \
+  _______, _______, _______,  KC_E ,   KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O   , KC_P,    KC_BSLASH, \
+  _______, _______, KC_S ,    KC_D,    KC_F,    KC_G,    KC_H   , KC_J,    KC_K,    KC_L,    KC_SCLN,  KC_QUOT, \
+  _______, _______, _______ , _______, _______, _______, KC_N,    _______, _______, _______, _______, _______, \
   _______, _______, _______ , _______, _______, _______, _______, _______, _______, _______, _______, _______ \
   ),
  /* Swedish locked layer
@@ -119,13 +135,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------+------+------+------+------+-------------+------+------+------+------+------|
  * |      |  ML  |  MD  |  MR  | MDOWN|      | LEFT | DOWN |  UP  |RIGHT |  Ö   |   Ä  |
  * |------+------+------+------+------+------|------+------+------+------+------+------|
- * |      |      |      |  MB1 |  MB2 |      |WORDL |      |      |WORDR |      |      |
+ * |      |      |      |  MB1 |  MB2 |      |WORDL |      |      |WORDR |      |TGSWE |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
  * |      |      |      |      |      |      |      |      | :(   |  :)  |  :p  | TGSWE|
  * `-----------------------------------------------------------------------------------'
  */
 [_L1] = LAYOUT( \
-  KC_GRAVE,TG(_COLEMAK),  _______  ,  XXXXXXX,     XXXXXXX,    XXXXXXX,   XXXXXXX,   XXXXXXX,   XXXXXXX, KC_MINUS, KC_EQL,   KC_DEL, \
+  KC_GRAVE,TG(_QWERTY),  _______  ,  XXXXXXX,     XXXXXXX,    XXXXXXX,   XXXXXXX,   XXXXXXX,   XXXXXXX, KC_MINUS, KC_EQL,   KC_DEL, \
   GUITAB,  XXXXXXX,      KC_MS_UP ,  XXXXXXX,     KC_WH_U,    XXXXXXX,   XXXXXXX,   XXXXXXX,   XXXXXXX, KC_LCBR,  KC_RCBR,  SWE_AA, \
   XXXXXXX, KC_MS_LEFT,   KC_MS_DOWN, KC_MS_RIGHT, KC_WH_D,    XXXXXXX,   KC_LEFT,   KC_DOWN,   KC_UP,   KC_RGHT,  SWE_OE,   SWE_AE, \
   _______, XXXXXXX,      XXXXXXX ,   KC_MS_BTN1,  KC_MS_BTN2, XXXXXXX,   WORDL,     XXXXXXX,   XXXXXXX, WORDR,    _______,  TG(_SWE_CMK), \
@@ -138,7 +154,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------+------+------+------+------+------+------+------+------+------+------+------|
  * |      |PRVTAB|NXTTAB|      |      |      |      |      |      |      |  [   |  ]   |
  * |------+------+------+------+------+-------------+------+------+------+------+------|
- * |      |PRVIJC|NXTIJC      |      |      |      |      |      |      |      |  "   |
+ * |      |PRVIJC|NXTIJC|      |      |      |      |      |      |      |      |  "   |
  * |------+------+------+------+------+------|------+------+------+------+------+------|
  * |      |  F1  |  F2  |  F3  |  F4  |  F5  |  F6  |  F7  |  F8  |  F9  | F10  | F11  |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
