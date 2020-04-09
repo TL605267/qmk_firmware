@@ -43,6 +43,18 @@
 
 static uint16_t space_cadet_control_timer = 0;
 
+//Tap Dance Declarations
+enum {
+  TD_BACKSLASH_SWEAA = 0,
+  TD_QUOT_SWEAE,
+  TD_SCLN_OE
+};
+
+#define BSLH_AA TD(TD_BACKSLASH_SWEAA)
+#define QUOT_AE TD(TD_QUOT_SWEAE)
+#define SCLN_OE TD(TD_SCLN_OE)
+
+
 enum layers {
   _COLEMAK,
   _QWERTY,
@@ -87,8 +99,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 [_COLEMAK] = LAYOUT( \
   KC_GESC,   KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,     KC_BSPC, \
-  KC_TAB,    KC_Q,    KC_W,    KC_F,    KC_P,    KC_G,    KC_J,    KC_L,    KC_U,    KC_Y,    KC_SCLN,  KC_BSLASH,  \
-  VIM_ESC,   KC_A,    KC_R,    KC_S,    KC_T,    KC_D,    KC_H,    KC_N,    KC_E,    KC_I,    KC_O,     KC_QUOT, \
+  KC_TAB,    KC_Q,    KC_W,    KC_F,    KC_P,    KC_G,    KC_J,    KC_L,    KC_U,    KC_Y,    SCLN_OE,  BSLH_AA,  \
+  VIM_ESC,   KC_A,    KC_R,    KC_S,    KC_T,    KC_D,    KC_H,    KC_N,    KC_E,    KC_I,    KC_O,     QUOT_AE, \
   KC_LSFT,   KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_K,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH,  SFT_ENT,  \
   LAY_3,     KC_LCTL, KC_LALT, KC_LGUI, L1_EQL, KC_LCTRL, KC_SPC,  MIN_L2,  KC_RGUI, ALT_AA  ,SWE_AE,   SWE_OE  \
   ),
@@ -208,6 +220,92 @@ void mod_type(uint16_t modcode, uint16_t keycode) {
 }
 */
 
+void send_oe(void) {
+    bool lshift = L_SHIFT_HELD;
+    bool rshift = R_SHIFT_HELD;
+    if (lshift)
+       unregister_mods(MOD_BIT(KC_LSFT));
+    if (rshift)
+       unregister_mods(MOD_BIT(KC_RSFT));
+    if (lshift || rshift)
+       SEND_STRING(SS_LALT("u")"O");
+    else
+       SEND_STRING(SS_LALT("u")"o");
+    if (lshift)
+       register_mods(MOD_BIT(KC_LSFT));
+    if (rshift)
+       register_mods(MOD_BIT(KC_RSFT));
+}
+
+void send_ae(void) {
+    bool lshift = L_SHIFT_HELD;
+    bool rshift = R_SHIFT_HELD;
+    if (lshift)
+      unregister_mods(MOD_BIT(KC_LSFT));
+    if (rshift)
+      unregister_mods(MOD_BIT(KC_RSFT));
+    if (lshift || rshift)
+      SEND_STRING(SS_LALT("u")"A");
+    else
+      SEND_STRING(SS_LALT("u")"a");
+    if (lshift)
+      register_mods(MOD_BIT(KC_LSFT));
+    if (rshift)
+      register_mods(MOD_BIT(KC_RSFT));
+}
+
+void dance_aa_finished (qk_tap_dance_state_t *state, void *user_data) {
+  if (state->count == 1) {
+    register_code (KC_BSLASH);
+  } else {
+    SEND_STRING(SS_LALT("a"));
+  }
+}
+
+void dance_aa_reset (qk_tap_dance_state_t *state, void *user_data) {
+  if (state->count == 1) {
+    unregister_code (KC_BSLASH);
+  } else {
+  }
+}
+
+void dance_ae_finished (qk_tap_dance_state_t *state, void *user_data) {
+  if (state->count == 1) {
+    register_code (KC_QUOT);
+  } else {
+    send_ae();
+  }
+}
+
+void dance_ae_reset (qk_tap_dance_state_t *state, void *user_data) {
+  if (state->count == 1) {
+    unregister_code (KC_QUOT);
+  } else {
+  }
+}
+
+void dance_oe_finished (qk_tap_dance_state_t *state, void *user_data) {
+  if (state->count == 1) {
+    register_code (KC_SCLN);
+  } else {
+    send_oe();
+  }
+}
+
+void dance_oe_reset (qk_tap_dance_state_t *state, void *user_data) {
+  if (state->count == 1) {
+    unregister_code (KC_SCLN);
+  } else {
+  }
+}
+
+
+qk_tap_dance_action_t tap_dance_actions[] = {
+ [TD_BACKSLASH_SWEAA] = ACTION_TAP_DANCE_FN_ADVANCED (NULL, dance_aa_finished, dance_aa_reset),
+ [TD_QUOT_SWEAE] = ACTION_TAP_DANCE_FN_ADVANCED (NULL, dance_ae_finished, dance_ae_reset),
+ [TD_SCLN_OE] = ACTION_TAP_DANCE_FN_ADVANCED (NULL, dance_oe_finished, dance_oe_reset)
+};
+
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   bool vim_handled = handle_vim_mode(keycode, record, _VIM);
   if (vim_handled)
@@ -216,38 +314,12 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
     case SWE_OE:
       if (record->event.pressed) {
-        bool lshift = L_SHIFT_HELD;
-        bool rshift = R_SHIFT_HELD;
-        if (lshift)
-          unregister_mods(MOD_BIT(KC_LSFT));
-        if (rshift)
-          unregister_mods(MOD_BIT(KC_RSFT));
-        if (lshift || rshift)
-          SEND_STRING(SS_LALT("u")"O");
-        else
-          SEND_STRING(SS_LALT("u")"o");
-        if (lshift)
-          register_mods(MOD_BIT(KC_LSFT));
-        if (rshift)
-          register_mods(MOD_BIT(KC_RSFT));
+          send_oe();
       }
       break;
     case SWE_AE:
       if (record->event.pressed) {
-        bool lshift = L_SHIFT_HELD;
-        bool rshift = R_SHIFT_HELD;
-        if (lshift)
-          unregister_mods(MOD_BIT(KC_LSFT));
-        if (rshift)
-          unregister_mods(MOD_BIT(KC_RSFT));
-        if (lshift || rshift)
-          SEND_STRING(SS_LALT("u")"A");
-        else
-          SEND_STRING(SS_LALT("u")"a");
-        if (lshift)
-          register_mods(MOD_BIT(KC_LSFT));
-        if (rshift)
-          register_mods(MOD_BIT(KC_RSFT));
+          send_ae();
       }
       break;
     case SWE_AA:

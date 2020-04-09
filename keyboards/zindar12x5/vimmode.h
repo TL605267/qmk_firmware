@@ -13,14 +13,14 @@
 #define GUITAB LGUI(KC_TAB)
 //#define ALT_AA RALT_T(SWE_AA)
 
-#define L_SHIFT_HELD (keyboard_report->mods & (MOD_BIT(KC_LSFT)))
-#define R_SHIFT_HELD (keyboard_report->mods & (MOD_BIT(KC_RSFT)))
+#define L_SHIFT_HELD (get_mods() & (MOD_BIT(KC_LSFT)))
+#define R_SHIFT_HELD (get_mods() & (MOD_BIT(KC_RSFT)))
 #define SHIFT_HELD (L_SHIFT_HELD || R_SHIFT_HELD)
-#define L_CTRL_HELD (keyboard_report->mods & (MOD_BIT(KC_LCTRL)))
-#define R_CTRL_HELD (keyboard_report->mods & (MOD_BIT(KC_RCTRL)))
+#define L_CTRL_HELD (get_mods() & (MOD_BIT(KC_LCTRL)))
+#define R_CTRL_HELD (get_mods() & (MOD_BIT(KC_RCTRL)))
 #define CTRL_HELD (L_CTRL_HELD || R_CTRL_HELD)
-#define L_GUI_HELD (keyboard_report->mods & (MOD_BIT(KC_LGUI)))
-#define R_GUI_HELD (keyboard_report->mods & (MOD_BIT(KC_RGUI)))
+#define L_GUI_HELD (get_mods() & (MOD_BIT(KC_LGUI)))
+#define R_GUI_HELD (get_mods() & (MOD_BIT(KC_RGUI)))
 #define GUI_HELD (L_GUI_HELD || R_GUI_HELD)
 
 #define TAPPING_TERM 250
